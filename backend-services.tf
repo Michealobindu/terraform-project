@@ -9,16 +9,21 @@ resource "aws_db_subnet_group" "vprofile-rds-subgrp" {
 resource "aws_elasticache_subnet_group" "vprofile-ecache-subgrp" {
   name       = "vprofile-ecache-subgrp"
   subnet_ids = [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]]
-
+  tags = {
+    Name = "Subnet group for ECACHE"
+  }
 }
 
+variable "db_name" {
+  default = ""
+}
 resource "aws_db_instance" "vprofile-rds" {
   allocated_storage      = 20
   storage_type           = "gp2"
   engine                 = "mysql"
   engine_version         = "5.6.34"
   instance_class         = "db.t2.micro"
-  name                   = var.dbname
+  name                   = 'var.dbname'
   username               = var.dbuser
   password               = var.dbpass
   parameter_group_name   = "default.mysql5.6"
